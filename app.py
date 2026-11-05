@@ -1,9 +1,6 @@
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 import streamlit as st
-from dotenv import load_dotenv
-
-load_dotenv()
 
 from database.db import (
     init_db, add_subject, list_subjects, delete_subject, get_settings,
