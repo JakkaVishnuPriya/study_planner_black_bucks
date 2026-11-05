@@ -4,24 +4,17 @@ from datetime import datetime, timedelta
 from openai import OpenAI
 
 def _api_key():
-    key = os.getenv("OPENAI_API_KEY", "").strip()
+    import streamlit as st
+
+    key = st.secrets.get("OPENAI_API_KEY", "")
     if not key:
-        try:
-            import streamlit as st
-            key = str(st.secrets.get("OPENAI_API_KEY", "")).strip()
-        except Exception:
-            pass
-    return key
+        raise ValueError("OPENAI_API_KEY is missing in Streamlit Secrets.")
+
+    return str(key).strip()
 
 def _model():
-    model = os.getenv("OPENAI_MODEL", "").strip()
-    if not model:
-        try:
-            import streamlit as st
-            model = str(st.secrets.get("OPENAI_MODEL", "gpt-4o-mini")).strip()
-        except Exception:
-            model = "gpt-4o-mini"
-    return model or "gpt-4o-mini"
+    import streamlit as st
+    return st.secrets.get("OPENAI_MODEL", "gpt-4o-mini")
 
 def call_json_llm(system_prompt, user_prompt):
     key = _api_key()
